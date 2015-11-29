@@ -2,7 +2,7 @@
 Grab the [TriHdrPatcher.exe](bin/TriHdrPatcher.exe?raw=true).  
 Drag and drop whatever file you might have into the executable.  
 The tool will inform you if the file has a known SHA1, will fix some known dump errors and of course set a nice header for your loader.  
-As of right now the folling games will get these IDs and game titles:  
+As of right now the following games will get these IDs and game titles:  
 GFZJ8P - F-Zero AX  
 GGPE01 - Mario Kart Arcade GP  
 GGPE02 - Mario Kart Arcade GP 2  
