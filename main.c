@@ -52,7 +52,6 @@ void handleIso(FILE *f, const unsigned char *wantHdr)
 
 int gpOverdump(FILE *f, size_t fsize)
 {
-	size_t i, j;
 	unsigned char fbuf[0x100];
 	unsigned char cmpBuf[8] = { 0xB9, 0x91, 0xFB, 0xC2, 0xD5, 0xB9, 0x02, 0x44 };
 
@@ -68,9 +67,10 @@ int gpOverdump(FILE *f, size_t fsize)
 		while(ftell(f) < 0x18000000)
 		{
 			fread(fbuf,1,0x100,f);
-			for(j = 0; j < 0x100; j+=8)
+			size_t i;
+			for(i = 0; i < 0x100; i+=8)
 			{
-				if(memcmp(fbuf+j,cmpBuf,8) != 0)
+				if(memcmp(fbuf+i,cmpBuf,8) != 0)
 					return 0;
 			}
 		}
@@ -139,7 +139,7 @@ void printUnkChksum(unsigned char *chksum)
 
 int main(int argc, char *argv[])
 {
-	puts("Triforce Header Patcher v1.0 by FIX94");
+	puts("Triforce Header Patcher v1.1 by FIX94");
 	if(argc != 2)
 	{
 		printerr("Please drag and drop a file into this exe.");
@@ -228,14 +228,33 @@ int main(int argc, char *argv[])
 		else
 			printUnkChksum(chksum);
 	}
-	else if(fsize == 0x1CA20000)
+	else if(fsize == 0x1CA1A400)
 	{
 		puts("Guessing Virtua Striker 4");
-		getBodySha1(f, 0x1CA20000, chksum);
+		getBodySha1(f, 0x1CA1A400, chksum);
 		if(isSha1of(chksum, vs4jap_13e_chksum, "Virtua Striker 4 (Japan) [GDT-0013E]"))
 			handleIso(f, vs4japHdr);
 		else if(isSha1of(chksum, vs4exp_15_chksum, "Virtua Striker 4 (Export) [GDT-0015]"))
 			handleIso(f, vs4expHdr);
+		else
+			printUnkChksum(chksum);
+	}
+	else if(fsize == 0x1CA20000)
+	{
+		puts("Guessing Virtua Striker 4 (Overdump 1)");
+		getBodySha1(f, 0x1CA1A400, chksum);
+		if(isSha1of(chksum, vs4jap_13e_chksum, "Virtua Striker 4 (Japan) [GDT-0013E]"))
+		{
+			_chsize(fileno(f), 0x1CA1A400); //windows only bleh
+			puts("Adjusted filesize!");
+			handleIso(f, vs4japHdr);
+		}
+		else if(isSha1of(chksum, vs4exp_15_chksum, "Virtua Striker 4 (Export) [GDT-0015]"))
+		{
+			_chsize(fileno(f), 0x1CA1A400); //windows only bleh
+			puts("Adjusted filesize!");
+			handleIso(f, vs4expHdr);
+		}
 		else
 			printUnkChksum(chksum);
 	}
