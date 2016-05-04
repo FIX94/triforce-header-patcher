@@ -1,7 +1,7 @@
 # Usage
 Grab the [TriHdrPatcher.exe](bin/TriHdrPatcher.exe?raw=true).  
-Drag and drop whatever file you might have into the executable.  
-The tool will inform you if the file has a known SHA1, will fix some known dump errors and of course set a nice header for your loader.  
+Drag and drop whatever file you might have into the executable. If they are still in MAME CHD/BIN format make sure to use [triforce-iso-extract](https://github.com/FIX94/triforce-iso-extract) on them first.   
+The tool will inform you if the file has a known SHA1, will fix some known dump errors and of course set a nice header for your loader. If you are using Nintendont as loader you can rename your patched file to game.iso afterwards.   
 As of right now the following games will get these IDs and game titles:  
 GFZJ8P - F-Zero AX  
 GGPE01 - Mario Kart Arcade GP  
