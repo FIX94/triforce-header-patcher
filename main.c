@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include "sha1.h"
 #include "staticVals.h"
+#include "good_tex_gp2.h"
 
 void printerr(char *msg)
 {
@@ -118,6 +119,24 @@ void fixVs4v06Jap(FILE *f)
 	}
 }
 
+void fixGP2(FILE *f)
+{
+	void *fbuf = malloc(0x3000);
+	fseek(f, 0x1A6A0000, SEEK_SET);
+	fread(fbuf, 1, 0x3000, f);
+	SHA1_CONTEXT fSha1;
+	sha1_init(&fSha1);
+	sha1_write(&fSha1, fbuf, 0x3000);
+	sha1_final(&fSha1);
+	free(fbuf);
+	if(memcmp((void*)fSha1.buf, (void*)bad_tex_gp2_chksum, 20) == 0)
+	{
+		fseek(f, 0x1A6A0000, SEEK_SET);
+		fwrite(good_tex_gp2, 1, 0x3000, f);
+		puts("Fixed a known dump error!");
+	}
+}
+
 int isSha1of(const void *chksum1, const void *chksum2, const char *name)
 {
 	if(memcmp(chksum1,chksum2,20) == 0)
@@ -139,7 +158,7 @@ void printUnkChksum(unsigned char *chksum)
 
 int main(int argc, char *argv[])
 {
-	puts("Triforce Header Patcher v1.1 by FIX94");
+	puts("Triforce Header Patcher v1.2 by FIX94");
 	if(argc != 2)
 	{
 		printerr("Please drag and drop a file into this exe.");
@@ -202,6 +221,7 @@ int main(int argc, char *argv[])
 	else if(fsize == 0x1E000000)
 	{
 		puts("Guessing Mario Kart Arcade GP 2");
+		fixGP2(f); // important to do before SHA1
 		getBodySha1(f, 0x1E000000, chksum);
 		if(isSha1of(chksum, gp2_unk_chksum, "Mario Kart Arcade GP 2 [Unknown]"))
 			handleIso(f, gp2Hdr);
