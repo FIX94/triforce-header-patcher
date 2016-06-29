@@ -1,6 +1,6 @@
 /* 
  * Triforce Header Patcher
- * Copyright (C) 2015 FIX94
+ * Copyright (C) 2015-2016 FIX94
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ void printUnkChksum(unsigned char *chksum)
 
 int main(int argc, char *argv[])
 {
-	puts("Triforce Header Patcher v1.2 by FIX94");
+	puts("Triforce Header Patcher v1.3 by FIX94");
 	if(argc != 2)
 	{
 		printerr("Please drag and drop a file into this exe.");
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 	{
 		puts("Guessing F-Zero AX");
 		getBodySha1(f, 0x19FCC500, chksum);
-		if(isSha1of(chksum, ax_unk_chksum, "F-Zero AX [Unknown]") || isSha1of(chksum, ax_4c_chksum, "F-Zero AX [GDT-0004C]")
+		if(isSha1of(chksum, ax_4c_chksum, "F-Zero AX [GDT-0004C]") || isSha1of(chksum, ax_4d_chksum, "F-Zero AX [GDT-0004D]")
 		 || isSha1of(chksum, ax_4e_chksum, "F-Zero AX [GDT-0004E]"))
 			handleIso(f, axHdr);
 		else
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 	{
 		puts("Guessing Mario Kart Arcade GP");
 		getBodySha1(f, 0x15000000, chksum);
-		if(isSha1of(chksum, gp_unk_chksum, "Mario Kart Arcade GP [Unknown]"))
+		if(isSha1of(chksum, gp_feb_14_06_chksum, "Mario Kart Arcade GP [Feb 14 2006 13:09:48]"))
 			handleIso(f, gpHdr);
 		else
 			printUnkChksum(chksum);
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 	{
 		puts("Guessing Mario Kart Arcade GP (Overdump 1)");
 		getBodySha1(f, 0x15000000, chksum);
-		if(isSha1of(chksum, gp_unk_chksum, "Mario Kart Arcade GP [Unknown]"))
+		if(isSha1of(chksum, gp_feb_14_06_chksum, "Mario Kart Arcade GP [Feb 14 2006 13:09:48]"))
 		{
 			_chsize(fileno(f), 0x15000000); //windows only bleh
 			puts("Adjusted filesize!");
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 	{
 		puts("Guessing Mario Kart Arcade GP (Overdump 2)");
 		getBodySha1(f, 0x15000000, chksum);
-		if(isSha1of(chksum, gp_unk_chksum, "Mario Kart Arcade GP [Unknown]"))
+		if(isSha1of(chksum, gp_feb_14_06_chksum, "Mario Kart Arcade GP [Feb 14 2006 13:09:48]"))
 		{
 			_chsize(fileno(f), 0x15000000); //windows only bleh
 			puts("Adjusted filesize!");
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 		puts("Guessing Mario Kart Arcade GP 2");
 		fixGP2(f); // important to do before SHA1
 		getBodySha1(f, 0x1E000000, chksum);
-		if(isSha1of(chksum, gp2_unk_chksum, "Mario Kart Arcade GP 2 [Unknown]"))
+		if(isSha1of(chksum, gp2_feb_7_07_chksum, "Mario Kart Arcade GP 2 [Feb 7 2007 02:47:24]"))
 			handleIso(f, gp2Hdr);
 		else
 			printUnkChksum(chksum);
