@@ -158,7 +158,7 @@ void printUnkChksum(unsigned char *chksum)
 
 int main(int argc, char *argv[])
 {
-	puts("Triforce Header Patcher v1.3 by FIX94");
+	puts("Triforce Header Patcher v1.4 by FIX94");
 	if(argc != 2)
 	{
 		printerr("Please drag and drop a file into this exe.");
@@ -254,7 +254,8 @@ int main(int argc, char *argv[])
 		getBodySha1(f, 0x1CA1A400, chksum);
 		if(isSha1of(chksum, vs4jap_13e_chksum, "Virtua Striker 4 (Japan) [GDT-0013E]"))
 			handleIso(f, vs4japHdr);
-		else if(isSha1of(chksum, vs4exp_15_chksum, "Virtua Striker 4 (Export) [GDT-0015]"))
+		else if(isSha1of(chksum, vs4exp_14_chksum, "Virtua Striker 4 (Export) [GDT-0014]") ||
+				isSha1of(chksum, vs4exp_15_chksum, "Virtua Striker 4 (Export) [GDT-0015]"))
 			handleIso(f, vs4expHdr);
 		else
 			printUnkChksum(chksum);
@@ -283,7 +284,8 @@ int main(int argc, char *argv[])
 		puts("Guessing Virtua Striker 4 Ver. 2006 (Japan)");
 		fixVs4v06Jap(f); // important to do before SHA1
 		getBodySha1(f, 0x1D4130C8, chksum);
-		if(isSha1of(chksum, vs4v06jap_20d_chksum, "Virtua Striker 4 Ver. 2006 (Japan) [GDT-0020D]"))
+		if(isSha1of(chksum, vs4v06jap_20b_chksum, "Virtua Striker 4 Ver. 2006 (Japan) [GDT-0020B]") ||
+			isSha1of(chksum, vs4v06jap_20d_chksum, "Virtua Striker 4 Ver. 2006 (Japan) [GDT-0020D]"))
 			handleIso(f, vs4v06japHdr);
 		else
 			printUnkChksum(chksum);
