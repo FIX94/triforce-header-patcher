@@ -15,5 +15,11 @@ GVS46J - Virtua Striker 4 Ver. 2006
 GVS46E - Virtua Striker 4 Ver. 2006  
 
 # Manual Compiling
-As of right now this is a windows only code. If you have MinGW installed and gcc referenced in your PATH variable just use the "build.bat".  
+
+## windows
+~~As of right now this is a windows only code~~. If you have MinGW installed and gcc referenced in your PATH variable just use the "build.bat".  
 Support for other OSes might follow in the future.
+
+## linux
+run build.sh, does the same thing as build.bat on windows
+

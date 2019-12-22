@@ -23,6 +23,17 @@
 #include "staticVals.h"
 #include "good_tex_gp2.h"
 
+
+int chSize( int fd, long size )
+{
+  #ifdef _WIN32
+    return _chsize(fd, size);
+  #else
+    return ftruncate(fd, size);
+  #endif
+}
+
+
 void printerr(char *msg)
 {
 	puts(msg);
@@ -158,7 +169,7 @@ void printUnkChksum(unsigned char *chksum)
 
 int main(int argc, char *argv[])
 {
-	puts("Triforce Header Patcher v1.4 by FIX94");
+	puts("Triforce Header Patcher v1.4[kam0de] by FIX94");
 	if(argc != 2)
 	{
 		printerr("Please drag and drop a file into this exe.");
@@ -198,7 +209,7 @@ int main(int argc, char *argv[])
 		getBodySha1(f, 0x15000000, chksum);
 		if(isSha1of(chksum, gp_feb_14_06_chksum, "Mario Kart Arcade GP [Feb 14 2006 13:09:48]"))
 		{
-			_chsize(fileno(f), 0x15000000); //windows only bleh
+			chSize(fileno(f), 0x15000000); //windows only bleh
 			puts("Adjusted filesize!");
 			handleIso(f, gpHdr);
 		}
@@ -211,7 +222,7 @@ int main(int argc, char *argv[])
 		getBodySha1(f, 0x15000000, chksum);
 		if(isSha1of(chksum, gp_feb_14_06_chksum, "Mario Kart Arcade GP [Feb 14 2006 13:09:48]"))
 		{
-			_chsize(fileno(f), 0x15000000); //windows only bleh
+			chSize(fileno(f), 0x15000000); //windows only bleh
 			puts("Adjusted filesize!");
 			handleIso(f, gpHdr);
 		}
@@ -266,13 +277,13 @@ int main(int argc, char *argv[])
 		getBodySha1(f, 0x1CA1A400, chksum);
 		if(isSha1of(chksum, vs4jap_13e_chksum, "Virtua Striker 4 (Japan) [GDT-0013E]"))
 		{
-			_chsize(fileno(f), 0x1CA1A400); //windows only bleh
+			chSize(fileno(f), 0x1CA1A400); //windows only bleh
 			puts("Adjusted filesize!");
 			handleIso(f, vs4japHdr);
 		}
 		else if(isSha1of(chksum, vs4exp_15_chksum, "Virtua Striker 4 (Export) [GDT-0015]"))
 		{
-			_chsize(fileno(f), 0x1CA1A400); //windows only bleh
+			chSize(fileno(f), 0x1CA1A400); //windows only bleh
 			puts("Adjusted filesize!");
 			handleIso(f, vs4expHdr);
 		}
@@ -299,10 +310,15 @@ int main(int argc, char *argv[])
 		else
 			printUnkChksum(chksum);
 	}
-	else
+	else {
 		puts("Unknown file, did nothing");
+	  fclose(f);
+    return 1;
+  }
 	fclose(f);
-	puts("Press enter to exit");
-	getc(stdin);
+  #ifdef _WIN32
+	  puts("Press enter to exit");
+  	getc(stdin);
+  #endif
 	return 0;
 }
